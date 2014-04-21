@@ -81,6 +81,8 @@ GEM
       builder
     i18n (0.6.9)
     innertube (1.1.0)
+    joiner (0.2.0)
+      activerecord (>= 3.1.0, < 4.1.0)
     jquery-datatables-rails (1.12.2)
       jquery-rails
     jquery-rails (3.1.0)
@@ -146,7 +148,7 @@ GEM
     rake (10.1.1)
     rdoc (4.1.1)
       json (~> 1.4)
-    riddle (1.5.9)
+    riddle (1.5.11)
     ruby-ldap (0.9.16)
     ruby_parser (3.4.1)
       sexp_processor (~> 4.1)
@@ -174,12 +176,13 @@ GEM
       actionpack (>= 3.0)
       activesupport (>= 3.0)
       sprockets (~> 2.8)
-    thinking-sphinx (3.0.6)
+    thinking-sphinx (3.1.1)
       activerecord (>= 3.1.0)
       builder (>= 2.1.2)
       innertube (>= 1.0.2)
+      joiner (>= 0.2.0)
       middleware (>= 0.1.0)
-      riddle (>= 1.5.9)
+      riddle (>= 1.5.11)
     thor (0.19.1)
     thread_safe (0.3.1)
       atomic (>= 1.1.7, < 2)
@@ -247,12 +250,11 @@ DEPENDENCIES
   rails (~> 4.0)
   rails_tokeninput (>= 1.6.1.rc1)
   rdoc
-  riddle (= 1.5.9)
   ruby-ldap
   sass-rails
   simplecov
   sprite-factory (>= 1.5.2)
-  thinking-sphinx
+  thinking-sphinx (> 3.1)
   tilt (>= 1.4.1)
   timecop
   uglifier (>= 1.2.2)
