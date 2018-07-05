@@ -1,9 +1,6 @@
 require 'rails_helper'
-# WARNING: Some tests require real backend answers, so make sure you uncomment
-# this line and start a test backend.
-# CONFIG['global_write_through'] = true
 
-RSpec.describe SourceController, vcr: true do
+RSpec.describe SourceController do
   let(:user) { create(:confirmed_user, login: 'tom') }
   let(:project) { user.home_project }
 

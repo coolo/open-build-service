@@ -1,10 +1,6 @@
 require 'rails_helper'
-# WARNING: If you change changerequest tests make sure you uncomment this line
-# and start a test backend. Some of the methods require real backend answers
-# for projects/packages.
-# CONFIG['global_write_through'] = true
 
-RSpec.describe Webui::RequestController, vcr: true do
+RSpec.describe Webui::RequestController do
   let(:submitter_with_group) { create(:user_with_groups, login: 'fluffyrabbit') }
   let(:submitter) { create(:confirmed_user, login: 'kugelblitz') }
   let(:receiver) { create(:confirmed_user, login: 'titan') }

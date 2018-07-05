@@ -1,10 +1,6 @@
 require 'rails_helper'
-# WARNING: If you change owner tests make sure you uncomment this line
-# and start a test backend. Some of the Owner methods
-# require real backend answers for projects/packages.
-# CONFIG['global_write_through'] = true
 
-RSpec.describe Webui::SearchController, vcr: true do
+RSpec.describe Webui::SearchController do
   let!(:user) { create(:confirmed_user, login: 'Iggy') }
   let!(:develuser) { create(:confirmed_user, login: 'DevelIggy') }
   let!(:package) { create(:package, name: 'TestPack', project: Project.find_by(name: 'home:Iggy')) }

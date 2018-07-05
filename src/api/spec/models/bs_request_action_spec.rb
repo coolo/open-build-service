@@ -1,12 +1,7 @@
 require 'rails_helper'
-# WARNING: If you change tests make sure you uncomment this line
-# and start a test backend. Some of the BsRequestAction methods
-# require real backend answers for projects/packages.
-# CONFIG['global_write_through'] = true
 
-RSpec.describe BsRequestAction, vcr: true do
+RSpec.describe BsRequestAction do
   let(:user) { create(:confirmed_user, login: 'request_user') }
-
   context 'encoding of sourcediffs' do
     let(:file_content) { "-{\xA2:\xFA*\xA3q\u0010\xC2X\\\x9D" }
     let(:utf8_encoded_file_content) { file_content.encode('UTF-8', 'binary', invalid: :replace, undef: :replace) }

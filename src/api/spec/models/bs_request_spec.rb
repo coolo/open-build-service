@@ -1,10 +1,7 @@
 require 'rails_helper'
 require 'nokogiri'
-# WARNING: If you change tests make sure you uncomment this line
-# and start a test backend. Some of the BsRequestAction methods
-# require real backend answers for projects/packages.
-# CONFIG['global_write_through'] = true
-RSpec.describe BsRequest, vcr: true do
+
+RSpec.describe BsRequest do
   let(:user) { create(:confirmed_user, login: 'tux') }
   let(:target_project) { create(:project, name: 'target_project') }
   let(:source_project) { create(:project, :as_submission_source, name: 'source_project') }

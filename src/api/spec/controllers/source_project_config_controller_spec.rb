@@ -1,8 +1,6 @@
 require 'rails_helper'
 
-# CONFIG['global_write_through'] = true
-
-RSpec.describe SourceProjectConfigController, vcr: true do
+RSpec.describe SourceProjectConfigController do
   let(:user) { create(:confirmed_user, login: 'tom') }
   let(:project) { user.home_project }
   let(:remote_project) { create(:remote_project) }
