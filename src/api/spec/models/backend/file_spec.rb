@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe Backend::File do
+RSpec.describe Backend::File, backend: true do
   let(:user) { create(:user, login: 'user') }
   let(:package_with_file) { create(:package_with_file, name: 'package_with_files', project: user.home_project) }
   let(:fake_file) do

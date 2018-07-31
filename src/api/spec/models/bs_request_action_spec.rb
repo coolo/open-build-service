@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe BsRequestAction do
   let(:user) { create(:confirmed_user, login: 'request_user') }
-  context 'encoding of sourcediffs' do
+  context 'encoding of sourcediffs', backend: true do
     let(:file_content) { "-{\xA2:\xFA*\xA3q\u0010\xC2X\\\x9D" }
     let(:utf8_encoded_file_content) { file_content.encode('UTF-8', 'binary', invalid: :replace, undef: :replace) }
     let(:project) { user.home_project }
