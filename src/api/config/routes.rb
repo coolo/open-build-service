@@ -325,7 +325,7 @@ OBSApi::Application.routes.draw do
       get 'request/show/:number' => :show, as: 'request_show', constraints: cons
       post 'request/sourcediff' => :sourcediff
       post 'request/changerequest' => :changerequest
-      get 'request/diff/:number' => :diff
+      get 'request/diff/:number' => :diff, as: 'request_diff', constraints: cons
       get 'request/list_small' => :list_small, as: 'request_list_small'
       get 'request/delete_request_dialog' => :delete_request_dialog, as: 'request_delete_dialog'
       post 'request/delete_request/:project' => :delete_request, constraints: cons, as: 'delete_request'

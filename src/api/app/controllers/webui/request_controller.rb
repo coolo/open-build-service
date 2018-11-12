@@ -80,6 +80,7 @@ class Webui::RequestController < Webui::WebuiController
   end
 
   def show
+    switch_to_webui2
     diff_limit = params[:full_diff] ? 0 : nil
     @req = @bs_request.webui_infos(filelimit: diff_limit, tarlimit: diff_limit, diff_to_superseded: @diff_to_superseded)
     @id = @req['id']
@@ -171,8 +172,7 @@ class Webui::RequestController < Webui::WebuiController
   end
 
   def diff
-    # just for compatibility. OBS 1.X used this route for show
-    redirect_to action: :show, number: params[:number]
+    render text: 'TODO'
   end
 
   def list_small
