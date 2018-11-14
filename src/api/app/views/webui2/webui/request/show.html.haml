@@ -5,8 +5,9 @@
 .card.mb-3
   = render partial: 'tabs', locals: { request: @bs_request }
   .card-body
-    = @pagetitle
-    (#{@state})
+    %h3
+      Request
+      = @state
     = description_wrapper(toggle_sliced_text(@req['description'], 300))
     = render partial: 'webui2/webui/request/actions', locals: { actions: @actions, request: @req }
     - if @superseding
