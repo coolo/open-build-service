@@ -10,6 +10,31 @@
         = @pagetitle
         (#{@state})
         = description_wrapper(toggle_sliced_text(@req['description'], 300))
+        - if @superseding
+          - @superseding.each do |supersed|
+            - if supersed.comments.any?
+              %h2
+                %a.supersed_comments_link> Show outdated comments
+                for superseded
+                \#{link_to "request #{supersed.number}", number: supersed.number}
+              .superseded_comments.hidden
+                = render partial: 'webui2/webui/comment/show', locals: { commentable: supersed }
+
+          %h2
+            Comments for request #{@number} (#{@comments.length})
+          #comments
+            = render partial: 'webui2/webui/comment/show', locals: { commentable: @bs_request }
+
+          = possibly_empty_ul id: 'review_descision_select', fallback: "<p><i>There's nothing to be done right now</i></p>".html_safe do
+            - if @can_handle_request
+              %li{ class: ('selected' if !@can_add_reviews || @my_open_reviews.empty?) }
+                %a.review-descision-link#review-descision-link--1{ href: '#' } My Decision
+            - @my_open_reviews.each do |open_review|
+              Review for #{reviewer(open_review)}
+            - content_for :ready_function do
+              requestShowReview();
+
+          = render partial: 'recent_events_table'
       .col-md-4
         = possibly_empty_ul class: 'horizontal-list' do
           - if @can_add_reviews
@@ -62,31 +87,5 @@
               = sprite_tag('exclamation')
               Open review for #{render partial: 'reviewer', locals: { review: review }}
 
-- if @superseding
-  - @superseding.each do |supersed|
-    - if supersed.comments.any?
-      %h2
-        %a.supersed_comments_link> Show outdated comments
-        for superseded
-        \#{link_to "request #{supersed.number}", number: supersed.number}
-      .superseded_comments.hidden
-        = render partial: 'webui2/webui/comment/show', locals: { commentable: supersed }
 
-  %h2
-    Comments for request #{@number} (#{@comments.length})
-  #comments
-    = render partial: 'webui2/webui/comment/show', locals: { commentable: @bs_request }
-
-  = possibly_empty_ul id: 'review_descision_select', fallback: "<p><i>There's nothing to be done right now</i></p>".html_safe do
-    - if @can_handle_request
-      %li{ class: ('selected' if !@can_add_reviews || @my_open_reviews.empty?) }
-        %a.review-descision-link#review-descision-link--1{ href: '#' } My Decision
-    - @my_open_reviews.each do |open_review|
-      Review for #{reviewer(open_review)}
-    - content_for :ready_function do
-      requestShowReview();
-
-.box.box-shadow#request-history
-  %h2 Request History
-  = render partial: 'recent_events_table'
 = render partial: 'webui2/webui/request/package_maintainers_dialog', locals: { package_maintainers: @package_maintainers }
