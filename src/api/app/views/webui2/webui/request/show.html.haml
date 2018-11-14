@@ -5,87 +5,33 @@
 .card.mb-3
   = render partial: 'tabs', locals: { request: @bs_request }
   .card-body
-    .row
-      .col-md-8
-        = @pagetitle
-        (#{@state})
-        = description_wrapper(toggle_sliced_text(@req['description'], 300))
-        - if @superseding
-          - @superseding.each do |supersed|
-            - if supersed.comments.any?
-              %h2
-                %a.supersed_comments_link> Show outdated comments
-                for superseded
-                \#{link_to "request #{supersed.number}", number: supersed.number}
-              .superseded_comments.hidden
-                = render partial: 'webui2/webui/comment/show', locals: { commentable: supersed }
-
+    = @pagetitle
+    (#{@state})
+    = description_wrapper(toggle_sliced_text(@req['description'], 300))
+    = render partial: 'webui2/webui/request/actions', locals: { actions: @actions, request: @req }
+    - if @superseding
+      - @superseding.each do |supersed|
+        - if supersed.comments.any?
           %h2
-            Comments for request #{@number} (#{@comments.length})
-          #comments
-            = render partial: 'webui2/webui/comment/show', locals: { commentable: @bs_request }
+            %a.supersed_comments_link> Show outdated comments
+            for superseded
+            \#{link_to "request #{supersed.number}", number: supersed.number}
+          .superseded_comments.hidden
+            = render partial: 'webui2/webui/comment/show', locals: { commentable: supersed }
 
-          = possibly_empty_ul id: 'review_descision_select', fallback: "<p><i>There's nothing to be done right now</i></p>".html_safe do
-            - if @can_handle_request
-              %li{ class: ('selected' if !@can_add_reviews || @my_open_reviews.empty?) }
-                %a.review-descision-link#review-descision-link--1{ href: '#' } My Decision
-            - @my_open_reviews.each do |open_review|
-              Review for #{reviewer(open_review)}
-            - content_for :ready_function do
-              requestShowReview();
+    #comments
+      = render partial: 'webui2/webui/comment/show', locals: { commentable: @bs_request }
 
-          = render partial: 'recent_events_table'
-      .col-md-4
-        = possibly_empty_ul class: 'horizontal-list' do
-          - if @can_add_reviews
-            %li= link_to(sprited_text('user_add', 'Add a review'),
-                        { controller: 'request', action: 'add_reviewer_dialog', number: @number }, remote: true)
-        = possibly_empty_ul class: 'clean_list' do
-          %li
-            = sprite_tag('user_green')
-            Created by
-            = user_with_realname_and_icon(@req['creator'], no_icon: true, short: true)
-            = fuzzy_time(@req['created_at'])
-          %li
-            = sprite_tag('information')
-            In state
-            = link_to(@state, { anchor: 'request-history' }, style: "color: #{request_state_color(@state)};")
-          - unless @package_maintainers.empty?
-            %li
-              = sprite_tag('eye')
-              = pluralize(@package_maintainers.size, 'package maintainer')
-              (#{link_to('show who', '#', class: 'show-dialog', data: { target: '#maintainers-dialog' })})
-          - if @superseding
-            %li
-              = sprite_tag('information', title: '')
-              Supersedes
-              - @superseding.each do |supersed|
-                = link_to supersed['number'], number: supersed['number']
-          - if @superseded_by
-            %li
-              = sprite_tag('exclamation', title: '')
-              Superseded
-              by #{link_to @superseded_by, number: @superseded_by}
-          - if @accept_at
-            %li
-              = sprite_tag('exclamation', title: '')
-              - if BsRequest::FINAL_REQUEST_STATES.include?(@state)
-                Auto-accept was set to
-                %span.fuzzy-time{ title: l(@accept_at) }
-                  = l @accept_at, format: :only_date
-                  \.
-              - elsif @accept_at.past?
-                This request will be automatically accepted when it enters the 'new' state.
-              - else
-                This request will be automatically accepted in #{time_ago_in_words(@accept_at)}.
-          - @other_open_reviews.each do |review|
-            %li
-              = sprite_tag('exclamation')
-              Open review for #{render partial: 'reviewer', locals: { review: review }}
-          - @my_open_reviews.each do |review|
-            %li
-              = sprite_tag('exclamation')
-              Open review for #{render partial: 'reviewer', locals: { review: review }}
+    = possibly_empty_ul id: 'review_descision_select', fallback: "<p><i>There's nothing to be done right now</i></p>".html_safe do
+      - if @can_handle_request
+        %li{ class: ('selected' if !@can_add_reviews || @my_open_reviews.empty?) }
+          %a.review-descision-link#review-descision-link--1{ href: '#' } My Decision
+      - @my_open_reviews.each do |open_review|
+        Review for #{reviewer(open_review)}
 
+    = render partial: 'recent_events_table'
 
 = render partial: 'webui2/webui/request/package_maintainers_dialog', locals: { package_maintainers: @package_maintainers }
+
+- content_for :ready_function do
+  requestShowReview();
