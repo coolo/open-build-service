@@ -1,6 +1,5 @@
-- actions.each_with_index do |action, action_index|
-  .action_display{:id => "action_display_#{action_index}", :style => "#{'display: none;' if action_index > 0}"}
-    %p
-      - action_type = action[:type]
-      - action_type = :add_role if action_type == :set_bugowner
-      = render partial: "webui2/webui/request/action_#{action_type}", locals: { action: action, request: request }
+- actions.each do |action|
+  %p
+    - action_type = action[:type]
+    - action_type = :add_role if action_type == :set_bugowner
+    = render partial: "webui2/webui/request/action_#{action_type}", locals: { action: action, request: request, creator: request.creator }

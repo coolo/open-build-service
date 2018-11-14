@@ -1,7 +1,7 @@
 %b
-  = user_with_realname_and_icon @bs_request.creator
+  = user_with_realname_and_icon creator
   wants
-  = requester_str(@bs_request.creator, action[:user], action[:group])
+  = requester_str(creator, action[:user], action[:group])
   to
   = creator_intentions(action[:role])
   for
