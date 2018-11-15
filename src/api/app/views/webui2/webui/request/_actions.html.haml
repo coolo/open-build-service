@@ -2,4 +2,4 @@
   %p
     - action_type = action[:type]
     - action_type = :add_role if action_type == :set_bugowner
-    = render partial: "webui2/webui/request/action_#{action_type}", locals: { action: action, request: request, creator: request.creator }
+    = render partial: "webui2/webui/request/action_#{action_type}", locals: { action: action, request: request, creator: creator }
