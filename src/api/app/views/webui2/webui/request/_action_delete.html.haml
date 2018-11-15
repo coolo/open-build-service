@@ -2,6 +2,6 @@
   Delete
   - if action[:trepo]
     repository
-    = link_to action[:trepo], :controller => :repositories, :action => :index, :project => action[:tprj], :repository => action[:trepo]
+    = link_to action[:trepo], controller: :repositories, action: :index, project: action[:tprj], repository: action[:trepo]
     in
   = project_or_package_link project: action[:tprj], package: action[:tpkg]

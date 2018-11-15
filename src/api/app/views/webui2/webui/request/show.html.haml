@@ -9,7 +9,7 @@
       Request
       = @state
     = description_wrapper(toggle_sliced_text(@req['description'], 300))
-    = render partial: 'webui2/webui/request/actions', locals: { actions: @actions, request: @req }
+    = render partial: 'webui2/webui/request/actions', locals: { actions: @actions, request: @req, creator: @bs_request.creator }
     - if @superseding
       - @superseding.each do |supersed|
         - if supersed.comments.any?
@@ -23,7 +23,7 @@
     #comments
       = render partial: 'webui2/webui/comment/show', locals: { commentable: @bs_request }
 
-    = possibly_empty_ul id: 'review_descision_select', fallback: "<p><i>There's nothing to be done right now</i></p>".html_safe do
+    = possibly_empty_ul id: 'review_descision_select', fallback: content_tag(:p, content_tag(:i, "There's nothing to be done right now")) do
       - if @can_handle_request
         %li{ class: ('selected' if !@can_add_reviews || @my_open_reviews.empty?) }
           %a.review-descision-link#review-descision-link--1{ href: '#' } My Decision
@@ -32,6 +32,9 @@
 
     = render partial: 'recent_events_table'
 
+-# render partial: 'webui2/webui/request/_other_infos', locals: { accept_at: @accept_at, superseding: @superseding,
+   can_add_reviews: @can_add_reviews, superseded_by: @superseded_by, state: @state, number: @number,
+   other_open_reviews: @other_open_reviews, my_open_reviews: @my_open_reviews, package_maintainers: @package_maintainers, req: @req }
 = render partial: 'webui2/webui/request/package_maintainers_dialog', locals: { package_maintainers: @package_maintainers }
 
 - content_for :ready_function do

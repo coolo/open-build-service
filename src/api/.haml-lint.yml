@@ -28,7 +28,6 @@ linters:
       - Metrics/BlockNesting
       - Metrics/LineLength
       - Naming/FileName
-      - Rails/OutputSafety
       - Style/FrozenStringLiteralComment
       - Style/IfUnlessModifier
       - Style/Next
