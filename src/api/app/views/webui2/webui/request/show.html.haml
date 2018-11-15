@@ -63,9 +63,9 @@
         - elsif r.by_user
           for user
           = link_to(r.by_user, user_show_path(r.by_user))
-        - else 
+        - else
           for group
-          = link_to(r.by_group, group_show_path(r.by_group)) 
+          = link_to(r.by_group, group_show_path(r.by_group))
 
         %u{ title: l(r.created_at.utc) }
           #{time_ago_in_words(r.created_at)} ago
@@ -79,4 +79,4 @@
     %p= h.to_json
 
 - @history.each do |e|
-  %p= "#{e.to_json}"
+  %p= e.to_json
