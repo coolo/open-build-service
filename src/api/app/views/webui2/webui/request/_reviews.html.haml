@@ -27,22 +27,23 @@
 
         %u{ title: l(r.created_at.utc) }
           #{time_ago_in_words(r.created_at)} ago
-      - reviewed = r.history_elements.first
-      - if reviewed
+      - r.history_elements.each do |review_history|
         .media
-          = user_image_tag(User.find_by_login(r.reviewer), size: 35, css_class: 'mr-3 d-none d-sm-block')
+          = user_image_tag(review_history.user, size: 35, css_class: 'mr-3 d-none d-sm-block')
           .media-body
             %p
-              = link_to(r.reviewer, user_show_path(r.reviewer))
-              = r.state
+              = link_to(review_history.user, user_show_path(review_history.user))
+              = review_history_verb(review_history)
               the review
-              %u{ title: l(reviewed.created_at.utc) }
-                #{time_ago_in_words(reviewed.created_at)} ago
-            - if reviewed.comment.present?
-              = render_as_markdown(reviewed.comment)
+              %u{ title: l(review_history.created_at.utc) }
+                #{time_ago_in_words(review_history.created_at)} ago
+            - if review_history.comment.present?
+              = render_as_markdown(review_history.comment)
             - else
-              %i
-                no comment
-      - else
+              %p
+                %i
+                  no comment
+
+      - if r.state == 'new'
         %i
           still open

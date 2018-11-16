@@ -116,4 +116,20 @@ module Webui::RequestHelper
     return "#{review[:by_project]} / #{review[:by_package]}" if review[:by_package]
     review[:by_user] || review[:by_group] || review[:by_project]
   end
+
+  def review_history_verb(history_element)
+    case history_element.class.to_s
+    when 'HistoryElement::ReviewAssigned'
+      'assigned'
+    when 'HistoryElement::ReviewReopened'
+      'reopened'
+    when 'HistoryElement::ReviewAccepted'
+      'accepted'
+    when 'HistoryElement::ReviewDeclined'
+      'declined'
+    else
+      "TODO in review_history_verb #{history_element.class}"
+    end
+  end
+
 end
