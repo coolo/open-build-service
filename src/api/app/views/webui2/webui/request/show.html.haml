@@ -30,7 +30,7 @@
       - @my_open_reviews.each do |open_review|
         Review for #{reviewer(open_review)}
 
-    = render partial: 'recent_events_table'
+    = render partial: 'webui2/webui/request/reviews', locals: { request: @bs_request }
 
 -# render partial: 'webui2/webui/request/_other_infos', locals: { accept_at: @accept_at, superseding: @superseding,
    can_add_reviews: @can_add_reviews, superseded_by: @superseded_by, state: @state, number: @number,
@@ -39,44 +39,3 @@
 
 - content_for :ready_function do
   requestShowReview();
-
-- @bs_request.reviews.each do |r|
-  .media
-    - if r.creator
-      = user_image_tag(User.find_by_login(r.creator), size: 35, css_class: 'mr-3 d-none d-sm-block')
-    - else
-      = user_image_tag(User.get_default_admin, size: 35, css_class: 'mr-3 d-none d-sm-block')
-    .media-body
-      %p
-        - if r.creator
-          = link_to(r.creator, user_show_path(r.creator))
-          opened review
-        - else
-          default project opened review
-
-        - if r.by_package
-          for package
-          = link_to(r.by_package, package_show_path(project: r.by_project, package: r.by_package))
-        - elsif r.by_project
-          for project
-          = link_to(r.by_project, project_show_path(project: r.by_project))
-        - elsif r.by_user
-          for user
-          = link_to(r.by_user, user_show_path(r.by_user))
-        - else
-          for group
-          = link_to(r.by_group, group_show_path(r.by_group))
-
-        %u{ title: l(r.created_at.utc) }
-          #{time_ago_in_words(r.created_at)} ago
-      - if r.history_elements.first
-        = render_as_markdown(r.history_elements.first.comment)
-      - else
-        nothing
-
-  %p= r.to_json
-  - r.history_elements do |h|
-    %p= h.to_json
-
-- @history.each do |e|
-  %p= e.to_json
