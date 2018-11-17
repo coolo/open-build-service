@@ -10,15 +10,17 @@
       = @state
     = description_wrapper(toggle_sliced_text(@req['description'], 300))
     = render partial: 'webui2/webui/request/actions', locals: { actions: @actions, request: @req, creator: @bs_request.creator }
-    - if @superseding
-      - @superseding.each do |supersed|
+    - @superseding.each do |supersed|
+      %h5
+        Superseds
+        = link_to "request #{supersed.number}", number: supersed.number
         - if supersed.comments.any?
-          %h2
-            %a.supersed_comments_link> Show outdated comments
-            for superseded
-            \#{link_to "request #{supersed.number}", number: supersed.number}
-          .superseded_comments.hidden
-            = render partial: 'webui2/webui/comment/show', locals: { commentable: supersed }
+          %a{ data: { toggle: 'collapse', target: "#comments_#{supersed.number}" } }
+            (#{supersed.comments.size} comments)
+            %i.fas.fa-angle-down
+          .superseded_comments.collapse{ id: "comments_#{supersed.number}" }
+            - supersed.comments.without_parent.each do |comment|
+              = render partial: 'webui2/webui/comment/content', locals: { comment: comment, commentable: supersed, level: 1 }
 
     #comments
       = render partial: 'webui2/webui/comment/show', locals: { commentable: @bs_request }

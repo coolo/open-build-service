@@ -131,5 +131,4 @@ module Webui::RequestHelper
       "TODO in review_history_verb #{history_element.class}"
     end
   end
-
 end
