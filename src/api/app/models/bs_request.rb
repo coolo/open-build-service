@@ -787,6 +787,7 @@ class BsRequest < ApplicationRecord
         review.state = new_review_state
         review.reviewer = User.current.login
         review.save!
+        Event::ReviewChanged.create(notify_parameters)
 
         history = nil
         history = HistoryElement::ReviewAccepted if new_review_state == :accepted
@@ -817,8 +818,8 @@ class BsRequest < ApplicationRecord
         # if all groups agreed, we can set all now to new
         bs_request_action_groups.each(&:set_group_to_new)
         self.comment = 'All reviewers accepted request'
-
         save!
+        Event::RequestReviewsDone.create(notify_parameters)
         # pre-approved requests can be processed
         BsRequestAutoAcceptJob.perform_later(id) if approver
       elsif new_request_state == :review
