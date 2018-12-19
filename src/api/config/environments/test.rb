@@ -56,8 +56,9 @@ OBSApi::Application.configure do
   # Bullet configuration
   config.after_initialize do
     Bullet.enable = true
-    Bullet.bullet_logger = true
-    Bullet.raise = false # raise an error if n+1 query occurs
+    Bullet.rails_logger = true
+    Bullet.unused_eager_loading_enable = false
+    Bullet.raise = true # raise an error if n+1 query occurs
   end
 
   # TODO: This shouldn't be needed when we switch to RSpec completely
