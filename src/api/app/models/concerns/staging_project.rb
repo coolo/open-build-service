@@ -9,6 +9,8 @@ module StagingProject
     after_save :update_staging_workflow_on_backend, if: :staging_project?
     after_destroy :update_staging_workflow_on_backend, if: :staging_project?
     before_create :add_managers_group, if: :staging_project?
+    after_create :create_project_log_entry, if: :staging_project?
+    before_update :create_project_log_entry, if: proc { |project| project.staging_project? && project.staging_workflow_id_was.nil? }
 
     scope :staging_projects, -> { where.not(staging_workflow: nil) }
   end
@@ -225,6 +227,15 @@ module StagingProject
 
   def add_managers_group
     assign_managers_group(staging_workflow.managers_group)
+  end
+
+  def create_project_log_entry
+    ProjectLogEntry.create!(
+      project: self,
+      user_name: User.current_or_nobody.login, # User.current should be defined, but we don't want this to fail if it's somehow not
+      event_type: :staging_project_created,
+      datetime: Time.now
+    )
   end
 
   def extract_missing_reviews(request, review)
