@@ -21,7 +21,7 @@ RSpec.describe Staging::ExcludedRequestsController, type: :controller, vcr: true
   end
 
   describe 'GET #index' do
-    let!(:request_exclusion_1) { create(:request_exclusion, bs_request: bs_request, staging_workflow: staging_workflow, description: 'Request 1') }
+    let(:request_exclusion_1) { create(:request_exclusion, bs_request: bs_request, staging_workflow: staging_workflow, description: 'Request 1') }
     let(:source_package_2) { create(:package, name: 'source_package_2', project: source_project) }
     let(:bs_request_2) do
       create(:bs_request_with_submit_action,
@@ -30,9 +30,12 @@ RSpec.describe Staging::ExcludedRequestsController, type: :controller, vcr: true
              source_package: source_package,
              review_by_group: group)
     end
-    let!(:request_exclusion_2) { create(:request_exclusion, bs_request: bs_request_2, staging_workflow: staging_workflow, description: 'Request 2') }
+    let(:request_exclusion_2) { create(:request_exclusion, bs_request: bs_request_2, staging_workflow: staging_workflow, description: 'Request 2') }
 
     before do
+      login user
+      request_exclusion_1
+      request_exclusion_2
       get :index, params: { staging_workflow_project: staging_workflow.project.name, format: :xml }
     end
 
@@ -48,7 +51,11 @@ RSpec.describe Staging::ExcludedRequestsController, type: :controller, vcr: true
   end
 
   describe 'POST #create' do
-    before { login(manager) }
+    before do
+      login(user)
+      staging_workflow
+      login(manager)
+    end
 
     context 'succeeds' do
       before do
@@ -102,7 +109,11 @@ RSpec.describe Staging::ExcludedRequestsController, type: :controller, vcr: true
   end
 
   describe 'DELETE #destroy' do
-    before { login(manager) }
+    before do
+      login(user)
+      staging_workflow
+      login(manager)
+    end
 
     let(:request_exclusion) { create(:request_exclusion, bs_request: bs_request, number: bs_request.number, staging_workflow: staging_workflow) }
 

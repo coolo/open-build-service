@@ -15,6 +15,7 @@ RSpec.describe Staging::StagingProjectsController, type: :controller, vcr: true 
   describe 'GET #index' do
     context 'existing staging_workflow' do
       before do
+        login user
         get :index, params: { staging_workflow_project: staging_workflow.project.name, format: :xml }
       end
 
@@ -33,6 +34,7 @@ RSpec.describe Staging::StagingProjectsController, type: :controller, vcr: true 
   describe 'GET #show' do
     context 'not existing project' do
       before do
+        login user
         get :show, params: { staging_workflow_project: staging_workflow.project.name, name: 'does-not-exist', format: :xml }
       end
 
@@ -78,6 +80,7 @@ RSpec.describe Staging::StagingProjectsController, type: :controller, vcr: true 
       end
 
       before do
+        login user
         stub_request(:get, broken_packages_path).and_return(body: broken_packages_backend)
         # staging select
         bs_request_to_review.change_review_state(:accepted, by_group: staging_workflow.managers_group.title)

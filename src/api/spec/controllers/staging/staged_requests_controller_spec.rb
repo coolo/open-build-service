@@ -24,6 +24,7 @@ RSpec.describe Staging::StagedRequestsController, type: :controller, vcr: true d
 
   describe 'GET #index' do
     before do
+      login user
       bs_request.staging_project = staging_project
       bs_request.save
       get :index, params: { staging_workflow_project: staging_workflow.project.name, staging_project_name: staging_project.name, format: :xml }
@@ -40,6 +41,7 @@ RSpec.describe Staging::StagedRequestsController, type: :controller, vcr: true d
   describe 'POST #create' do
     context 'invalid user' do
       before do
+        login user
         staging_workflow
 
         login other_user
@@ -86,9 +88,11 @@ RSpec.describe Staging::StagedRequestsController, type: :controller, vcr: true d
   end
 
   describe 'DELETE #destroy' do
-    let!(:package) { create(:package, name: target_package, project: staging_project) }
+    let(:package) { create(:package, name: target_package, project: staging_project) }
 
     before do
+      login user
+      package
       bs_request.staging_project = staging_project
       bs_request.save
     end

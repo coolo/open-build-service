@@ -232,7 +232,7 @@ module StagingProject
   def create_project_log_entry
     ProjectLogEntry.create!(
       project: self,
-      user_name: User.current_or_nobody.login, # User.current should be defined, but we don't want this to fail if it's somehow not
+      user_name: User.current.login, # User.current should be defined, but we don't want this to fail if it's somehow not
       event_type: :staging_project_created,
       datetime: Time.now
     )

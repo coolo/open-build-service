@@ -13,15 +13,15 @@ RSpec.describe Project, vcr: true do
     let(:staging_workflow) { create(:staging_workflow_with_staging_projects, project: user.home_project, managers_group: managers_group) }
     let(:staging_project) { staging_workflow.staging_projects.first }
 
-    let!(:repository) { create(:repository, architectures: ['x86_64'], project: staging_project, name: 'staging_repository') }
-    let!(:repository_arch) { repository.repository_architectures.first }
-    let!(:architecture) { repository_arch.architecture }
-    let!(:package) { create(:package_with_file, project: staging_project) }
+    let(:repository) { create(:repository, architectures: ['x86_64'], project: staging_project, name: 'staging_repository') }
+    let(:repository_arch) { repository.repository_architectures.first }
+    let(:architecture) { repository_arch.architecture }
+    let(:package) { create(:package_with_file, project: staging_project) }
 
-    let!(:published_report) { create(:status_report, checkable: repository) }
-    let!(:build_report) { create(:status_report, checkable: repository_arch) }
-    let!(:repository_uuid) { published_report.uuid }
-    let!(:build_uuid) { build_report.uuid }
+    let(:published_report) { create(:status_report, checkable: repository) }
+    let(:build_report) { create(:status_report, checkable: repository_arch) }
+    let(:repository_uuid) { published_report.uuid }
+    let(:build_uuid) { build_report.uuid }
 
     let(:target_project) { create(:project, name: 'target_project') }
     let(:source_project) { create(:project, :as_submission_source, name: 'source_project') }
@@ -39,6 +39,9 @@ RSpec.describe Project, vcr: true do
 
     before do
       login(user)
+      # instantiate all variables after login
+      package
+      architecture
       allow(Backend::Api::Published).to receive(:build_id).with(staging_project.name, repository.name).and_return(repository_uuid)
       allow(Backend::Api::Build::Repository).to receive(:build_id).with(staging_project.name, repository.name, architecture.name).and_return(build_uuid)
     end
