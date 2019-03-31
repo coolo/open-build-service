@@ -228,24 +228,16 @@ jobs:
           path: src/api/coverage_results
           destination: raw_coverage
 
+   docker_build:
+     docker:
+       - image: circleci/cci-demo-docker-primary:0.0.2
+
+     steps:
+      - checkout
+      - run: rake docker:build
+ 
 workflows:
   version: 2
   test_all:
     jobs:
-      - checkout_code
-      - backend_test:
-          requires:
-            - checkout_code
-      - rspec:
-          requires:
-            - checkout_code
-      - minitest:
-          requires:
-            - checkout_code
-      - spider:
-          requires:
-            - checkout_code
-      - coverage:
-          requires:
-            - rspec
-            - minitest
+      - docker_build
