@@ -230,7 +230,7 @@ jobs:
 
   docker_build:
     docker:
-      - image: circleci/cci-demo-docker-primary:0.0.2
+      - image: registry.opensuse.org/obs/server/unstable/container/leap/15/containers/openbuildservice/dockercompose:latest
 
     steps:
       - checkout
