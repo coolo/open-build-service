@@ -228,11 +228,11 @@ jobs:
           path: src/api/coverage_results
           destination: raw_coverage
 
-   docker_build:
-     docker:
-       - image: circleci/cci-demo-docker-primary:0.0.2
+  docker_build:
+    docker:
+      - image: circleci/cci-demo-docker-primary:0.0.2
 
-     steps:
+    steps:
       - checkout
       - run: rake docker:build
  
