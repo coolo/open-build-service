@@ -358,7 +358,7 @@ class Webui::ProjectController < Webui::WebuiController
   end
 
   def monitor
-    switch_to_webui2
+    return if switch_to_webui2
     unless (buildresult = monitor_buildresult)
       @buildresult_unavailable = true
       return

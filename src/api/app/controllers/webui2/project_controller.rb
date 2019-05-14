@@ -25,6 +25,23 @@ module Webui2::ProjectController
     end
   end
 
+  def webui2_monitor
+    unless (buildresult = monitor_buildresult)
+      @buildresult_unavailable = true
+      return
+    end
+
+    monitor_parse_buildresult(buildresult)
+    @shown_entries = params.fetch('shown-entries', 50)
+
+    # extract repos
+    repohash = {}
+    @statushash.each do |repo, arch_hash|
+      repohash[repo] = arch_hash.keys.sort!
+    end
+    @repoarray = repohash.sort
+  end
+
   private
 
   def project_for_datatable

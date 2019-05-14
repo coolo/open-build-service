@@ -1,0 +1,14 @@
+%p
+  %a.btn.btn-block.btn-primary{ 'data-toggle' => "collapse", href: "#collapseExample", role: "button", 'aria-expanded' => "false", 'aria-controls' => "collapseExample" }
+    Problems
+.collapse#collapseExample
+  .card.card-body
+    %ul
+      - statushash.each do |repository, repository_values|
+        - repository_values.each do |architecture, architecture_values|
+          - architecture_values.values.select { |e| e['code'].in? ['failed', 'unresolvable'] }.each do |element|
+            %li
+              = "#{repository} / #{architecture} / #{element['package']}  - #{element['code']}"
+
+%pre
+  = JSON.pretty_generate(statushash)
