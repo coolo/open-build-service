@@ -297,7 +297,7 @@ sub runservice {
     };
     $ev->{'linksrcmd5'} = $lxservicemd5 if $lxservicemd5;
     $ev->{'projectservicesmd5'} = $projectservicesmd5 if $projectservicesmd5;
-    $ev->{'oldsrcmd5'} = $oldfilesrev->{'srcmd5'} if %$oldfiles && $oldfilesrev;
+    $ev->{'oldsrcmd5'} = $oldfilesrev->{'srcmd5'} if $oldfiles && %$oldfiles && $oldfilesrev;
     mkdir_p("$eventdir/servicedispatch");
     my $evname = "servicedispatch:${projid}::${packid}::$rev->{'srcmd5'}::$servicemark";
     $evname = "servicedispatch:::".Digest::MD5::md5_hex($evname) if length($evname) > 200;
