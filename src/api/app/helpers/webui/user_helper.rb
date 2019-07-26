@@ -117,7 +117,11 @@ module Webui::UserHelper
 
     if packages.size == 1
       single_package = packages.first.first
-      return "#{pluralize(count, 'commit')} in #{link_to("#{project} / #{single_package}", package_show_path(project, single_package))}"
+      return capture do
+        concat pluralize(count, 'commit')
+        concat ' in '
+        concat link_to("#{project} / #{single_package}", package_show_path(project, single_package))
+      end
     end
     capture do
       concat pluralize(count, 'commit')
@@ -126,7 +130,7 @@ module Webui::UserHelper
       content_tag(:ul, class: 'mt-1') do
         packages = packages.sort_by { |_, c| -c }
         packages[0..(max_packages - 1)].each do |package, pcount|
-          concat content_tag(:li) do
+          content_tag(:li) do
             concat pluralize(pcount, 'commit')
             concat ' in '
             concat link_to package, package_show_path(project, package)
@@ -136,7 +140,7 @@ module Webui::UserHelper
       end
       diff = packages.size - max_packages
       if diff > 0
-        concat content_tag(:li) do
+        content_tag(:li) do
           concat ' and '
           concat pluralize(count, 'commit')
           concat ' in '
