@@ -1,3 +1,4 @@
+# rubocop:disable Metrics/ModuleLength
 module Webui::UserHelper
   def user_actions(user)
     safe_join(
@@ -110,4 +111,40 @@ module Webui::UserHelper
     max_items += 1 if items_array.size == (max_items + 1)
     max_items
   end
+
+  def activity_date_commits_project(project, packages, count)
+    max_packages = max_activity_items(3, packages)
+
+    if packages.size == 1
+      single_package = packages.first.first
+      return "#{pluralize(count, 'commit')} in #{link_to("#{project} / #{single_package}", package_show_path(project, single_package))}"
+    end
+    capture do
+      concat pluralize(count, 'commit')
+      concat ' in '
+      concat link_to(project, project_show_path(project))
+      content_tag(:ul, class: 'mt-1') do
+        packages = packages.sort_by { |_, c| -c }
+        packages[0..(max_packages - 1)].each do |package, pcount|
+          concat content_tag(:li) do
+            concat pluralize(pcount, 'commit')
+            concat ' in '
+            concat link_to package, package_show_path(project, package)
+          end
+          count -= pcount
+        end
+      end
+      diff = packages.size - max_packages
+      if diff > 0
+        concat content_tag(:li) do
+          concat ' and '
+          concat pluralize(count, 'commit')
+          concat ' in '
+          concat pluralize(diff, 'package')
+          concat ' more'
+        end
+      end
+    end
+  end
 end
+# rubocop:enable Metrics/ModuleLength
